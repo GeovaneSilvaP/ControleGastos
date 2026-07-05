@@ -9,7 +9,10 @@ namespace BackEnd.src.Interfaces.Repositories;
 public interface ITransacaoRepository
 {
     Task<List<Transacao>> ListarAsync();
+
     Task<List<Transacao>> ListarPorPessoaAsync(int pessoaId);
+
     Task CriarAsync(Transacao transacao);
+    
     Task SalvarAlteracoesAsync();
 }

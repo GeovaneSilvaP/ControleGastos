@@ -1,4 +1,4 @@
-using BackEnd.src.DTOs.Pessoa;
+using BackEnd.src.DTOs.Relatorio;
 
 namespace BackEnd.src.Interfaces.Services;
 
@@ -8,5 +8,5 @@ namespace BackEnd.src.Interfaces.Services;
 /// </summary>
 public interface IRelatorioService
 {
-    Task<List<PessoaResumoDTO>> ObterResumoAsync();
+    Task<RelatorioDTO> ObterRelatorioAsync();
 }
