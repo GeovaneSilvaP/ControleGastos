@@ -1,0 +1,20 @@
+.page-container table th:last-child,
+.page-container table td:last-child {
+  text-align: right;
+  width: 100px;
+}
+
+.page-container button {
+  background: var(--danger);
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.page-container button:hover {
+  background: #b91c1c;
+}
