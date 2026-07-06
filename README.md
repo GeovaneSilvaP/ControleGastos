@@ -1,6 +1,6 @@
 # 💰 Sistema de Controle de Gastos Residenciais
 
-API REST desenvolvida em **ASP.NET Core 8** para gerenciamento de gastos residenciais.
+Sistema fullstack para gerenciamento de gastos residenciais, composto por uma **API REST em ASP.NET Core 8** e um **frontend em React + TypeScript**.
 
 O sistema permite:
 
@@ -9,12 +9,13 @@ O sistema permite:
 - Consulta de totais por pessoa;
 - Consulta do total geral do sistema.
 
-Este projeto foi desenvolvido utilizando arquitetura em camadas, seguindo boas práticas de desenvolvimento e organização do código.
+Este projeto foi desenvolvido utilizando arquitetura em camadas, seguindo boas práticas de desenvolvimento e organização do código, tanto no backend quanto no frontend.
 
 ---
 
 # 🚀 Tecnologias Utilizadas
 
+## Backend
 - ASP.NET Core 8
 - C#
 - Entity Framework Core
@@ -23,70 +24,29 @@ Este projeto foi desenvolvido utilizando arquitetura em camadas, seguindo boas p
 - Swagger / OpenAPI
 - Middleware para tratamento global de exceções
 
+## Frontend
+- React
+- TypeScript
+- Vite
+- React Router DOM
+- React Hook Form
+- Zod (validação de formulários)
+- Axios (consumo da API)
+- CSS puro (sem frameworks de UI)
+
 ---
 
 # 📁 Estrutura do Projeto
-
-```
-BackEnd
-│
-├── src
-│   ├── Controllers
-│   ├── Data
-│   ├── DTOs
-│   ├── Entities
-│   ├── Exceptions
-│   ├── Interfaces
-│   │     ├── Repositories
-│   │     └── Services
-│   ├── Middlewares
-│   ├── Repositories
-│   ├── Services
-│   └── Validators
-│
-├── Migrations
-├── Program.cs
-├── appsettings.json
-└── README.md
-```
-
 ---
 
 # 🏛 Arquitetura
 
+## Backend
+
 O projeto segue o padrão de arquitetura em camadas.
-
-```
-Cliente
-
-↓
-
-Controller
-
-↓
-
-Validator (FluentValidation)
-
-↓
-
-Service
-
-↓
-
-Repository
-
-↓
-
-Entity Framework
-
-↓
-
-MySQL
-```
-
 Cada camada possui uma responsabilidade específica.
 
-## Controllers
+### Controllers
 
 Responsáveis por receber as requisições HTTP e retornar as respostas.
 
@@ -94,7 +54,7 @@ Não possuem regra de negócio.
 
 ---
 
-## Services
+### Services
 
 Responsáveis pelas regras de negócio.
 
@@ -106,13 +66,13 @@ Exemplos:
 
 ---
 
-## Repositories
+### Repositories
 
 Responsáveis pelo acesso ao banco de dados utilizando Entity Framework Core.
 
 ---
 
-## DTOs
+### DTOs
 
 Responsáveis pela comunicação entre cliente e API.
 
@@ -120,23 +80,94 @@ Evitam expor diretamente as entidades do banco.
 
 ---
 
-## Validators
+### Validators
 
 Realizam validações utilizando FluentValidation antes da requisição chegar ao Service.
 
 ---
 
-## Middleware
+### Middleware
 
 Responsável pelo tratamento global das exceções da aplicação.
 
 ---
 
+## Frontend
+
+O frontend segue uma organização por responsabilidade, separando páginas, componentes reutilizáveis, serviços de comunicação com a API e tipagens.
+### Pages
+
+Componentes de página, um para cada rota da aplicação:
+
+- **Dashboard** — exibe um resumo geral (receitas, despesas e saldo);
+- **Pessoas** — lista e permite excluir pessoas cadastradas;
+- **NovaPessoa** — formulário de cadastro de pessoa;
+- **Transacoes** — lista as transações cadastradas;
+- **NovaTransacao** — formulário de cadastro de transação;
+- **Relatorio** — relatório financeiro detalhado por pessoa.
+
+---
+
+### Components
+
+Componentes reutilizáveis de UI:
+
+- **Layout** — estrutura base (Sidebar + Header + conteúdo da rota via `Outlet`);
+- **Sidebar** — menu de navegação lateral;
+- **Header** — cabeçalho fixo;
+- **Button** — botão padronizado (variantes `primary` e `danger`);
+- **SummaryCard** — card de resumo usado no Dashboard.
+
+---
+
+### Services
+
+Responsáveis pela comunicação com a API, utilizando Axios:
+
+- `api.ts` — instância do Axios configurada com a URL base da API;
+- `pessoaService.ts` — listar, criar e excluir pessoas;
+- `transacaoService.ts` — listar e criar transações;
+- `relatorioService.ts` — obter o relatório financeiro geral.
+
+---
+
+### Interfaces
+
+Tipagens TypeScript que espelham os DTOs do backend, garantindo tipagem forte na comunicação com a API (`Pessoa`, `CriarPessoa`, `Transacao`, `CriarTransacao`, `Relatorio`, `RelatorioPessoa`).
+
+---
+
+### Validação de Formulários
+
+Os formulários (`NovaPessoa` e `NovaTransacao`) utilizam **React Hook Form** integrado ao **Zod** através do `@hookform/resolvers`, validando os dados no client antes de enviá-los à API.
+
+---
+
+### Rotas
+
+As rotas são definidas em `AppRoutes.tsx` utilizando `react-router-dom`, com todas as páginas renderizadas dentro do `Layout` compartilhado (Sidebar + Header fixos).
+
+| Rota | Página |
+|------|--------|
+| `/` | Dashboard |
+| `/pessoas` | Pessoas |
+| `/nova-pessoa` | NovaPessoa |
+| `/transacoes` | Transacoes |
+| `/nova-transacao` | NovaTransacao |
+| `/relatorio` | Relatorio |
+
+---
+
 # ⚙️ Requisitos
 
+## Backend
 - .NET SDK 8
 - MySQL
 - Visual Studio 2022 ou VS Code
+
+## Frontend
+- Node.js 18+
+- npm ou yarn
 
 ---
 
@@ -150,7 +181,9 @@ git clone https://github.com/seuusuario/seu-repositorio.git
 
 ---
 
-## 2 Entre na pasta
+## Backend
+
+### 2 Entre na pasta
 
 ```bash
 cd BackEnd
@@ -158,7 +191,7 @@ cd BackEnd
 
 ---
 
-## 3 Restaurar dependências
+### 3 Restaurar dependências
 
 ```bash
 dotnet restore
@@ -166,14 +199,9 @@ dotnet restore
 
 ---
 
-## 4 Configurar banco de dados
+### 4 Configurar banco de dados
 
 No arquivo:
-
-```
-appsettings.json
-```
-
 Configure sua conexão.
 
 Exemplo:
@@ -188,7 +216,7 @@ Exemplo:
 
 ---
 
-## 5 Executar as migrations
+### 5 Executar as migrations
 
 ```bash
 dotnet ef database update
@@ -196,7 +224,7 @@ dotnet ef database update
 
 ---
 
-## 6 Executar a API
+### 6 Executar a API
 
 ```bash
 dotnet run
@@ -204,18 +232,49 @@ dotnet run
 
 ---
 
-## 7 Abrir Swagger
-
-```
-https://localhost:xxxx/swagger
-```
-
+### 7 Abrir Swagger
 ou
+---
 
-```
-http://localhost:xxxx/swagger
+## Frontend
+
+### 8 Entre na pasta
+
+```bash
+cd FrontEnd
 ```
 
+---
+
+### 9 Instalar dependências
+
+```bash
+npm install
+```
+
+---
+
+### 10 Configurar a URL da API
+
+No arquivo `src/services/api.ts`, verifique se a `baseURL` aponta para o endereço correto da API:
+
+```ts
+export const api = axios.create({
+  baseURL: "http://localhost:5000/api",
+});
+```
+
+---
+
+### 11 Executar o frontend
+
+```bash
+npm run dev
+```
+
+---
+
+### 12 Acessar a aplicação
 ---
 
 # 📌 Endpoints
@@ -225,19 +284,9 @@ http://localhost:xxxx/swagger
 ## Pessoas
 
 ### Listar Pessoas
-
-```
-GET /api/pessoas
-```
-
 ---
 
 ### Criar Pessoa
-
-```
-POST /api/pessoas
-```
-
 Exemplo:
 
 ```json
@@ -260,11 +309,6 @@ Resposta:
 ---
 
 ### Excluir Pessoa
-
-```
-DELETE /api/pessoas/{id}
-```
-
 Ao excluir uma pessoa, todas as suas transações são removidas automaticamente.
 
 ---
@@ -274,19 +318,9 @@ Ao excluir uma pessoa, todas as suas transações são removidas automaticamente
 ---
 
 ### Listar Transações
-
-```
-GET /api/transacoes
-```
-
 ---
 
 ### Criar Transação
-
-```
-POST /api/transacoes
-```
-
 Exemplo:
 
 ```json
@@ -312,11 +346,6 @@ Exemplo:
 ---
 
 ### Consultar Totais
-
-```
-GET /api/relatorio
-```
-
 Resposta:
 
 ```json
@@ -375,6 +404,8 @@ Exemplo:
 
 # ✔ Validações
 
+## Backend
+
 Todas as validações são realizadas utilizando FluentValidation.
 
 Exemplo:
@@ -390,6 +421,10 @@ Resposta:
 
 HTTP 400
 
+## Frontend
+
+As validações de formulário são realizadas no client com **Zod**, exibindo mensagens de erro abaixo de cada campo antes mesmo do envio à API (ex: nome com menos de 3 caracteres, idade fora do intervalo permitido, valor de transação negativo ou zero).
+
 ---
 
 # 🛠 Banco de Dados
@@ -397,11 +432,6 @@ HTTP 400
 Relacionamentos:
 
 Pessoa
-
-```
-1 ---- N
-```
-
 Transações
 
 Ao excluir uma pessoa:
@@ -412,6 +442,7 @@ Ao excluir uma pessoa:
 
 # 📚 Padrões Utilizados
 
+## Backend
 - Arquitetura em Camadas
 - Repository Pattern
 - Dependency Injection
@@ -421,37 +452,12 @@ Ao excluir uma pessoa:
 - Entity Framework Core
 - REST API
 
----
-
-# 📖 Fluxo da Requisição
-
-```
-Request
-
-↓
-
-Controller
-
-↓
-
-Validator
-
-↓
-
-Service
-
-↓
-
-Repository
-
-↓
-
-MySQL
-
-↓
-
-Response
-```
+## Frontend
+- Component-Based Architecture
+- Separação por responsabilidade (pages / components / services / interfaces)
+- Camada de serviços dedicada ao consumo da API (Axios)
+- Validação de formulários com Schema Validation (Zod)
+- Roteamento declarativo com layout compartilhado (React Router)
 
 ---
 
