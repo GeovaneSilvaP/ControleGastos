@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { criarTransacao } from "../../services/transacaoService";
 import { listarPessoas } from "../../services/pessoaService";
 import { Pessoa } from "../../interfaces/Pessoa";
+import axios from "axios";
 import "./NovaTransacao.css";
 
 const schema = z.object({
@@ -35,9 +36,19 @@ export default function NovaTransacao() {
   }, []);
 
   async function salvar(data: FormData) {
-    await criarTransacao(data);
-    alert("Transação cadastrada.");
-    reset();
+    try {
+      await criarTransacao(data);
+
+      alert("Transação cadastrada com sucesso!");
+
+      reset();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.mensagem ?? "Erro ao cadastrar transação.");
+      } else {
+        alert("Erro inesperado.");
+      }
+    }
   }
 
   return (

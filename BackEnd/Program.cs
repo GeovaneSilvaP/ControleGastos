@@ -11,10 +11,29 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Controllers
+#region Controllers
+
 builder.Services.AddControllers();
 
-// FluentValidation
+#endregion
+
+#region CORS
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactPolicy", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+#endregion
+
+#region FluentValidation
+
 builder.Services.AddFluentValidationAutoValidation(options =>
 {
     options.DisableDataAnnotationsValidation = true;
@@ -22,31 +41,48 @@ builder.Services.AddFluentValidationAutoValidation(options =>
 
 builder.Services.AddValidatorsFromAssemblyContaining<PessoaValidator>();
 
-// Swagger
+#endregion
+
+#region Swagger
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Banco de Dados
+#endregion
+
+#region Banco de Dados
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+        ServerVersion.AutoDetect(
+            builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 });
 
-// Repositories
+#endregion
+
+#region Repositories
+
 builder.Services.AddScoped<IPessoaRepository, PessoaRepository>();
 builder.Services.AddScoped<ITransacaoRepository, TransacaoRepository>();
 
-// Services
+#endregion
+
+#region Services
+
 builder.Services.AddScoped<IPessoaService, PessoaService>();
 builder.Services.AddScoped<ITransacaoService, TransacaoService>();
 builder.Services.AddScoped<IRelatorioService, RelatorioService>();
 
+#endregion
+
 var app = builder.Build();
 
-// Middleware global de tratamento de exceções
+#region Middlewares
+
+// Middleware global de exceções
 app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
@@ -57,8 +93,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// CORS (deve vir antes da autorização)
+app.UseCors("ReactPolicy");
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+#endregion
 
 app.Run();

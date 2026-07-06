@@ -18,6 +18,8 @@ export const Sidebar = () => {
 
         <NavLink to="/nova-pessoa">Nova Pessoa</NavLink>
 
+        <NavLink to="/nova-transacao">Nova Transacao</NavLink>
+
         <NavLink to="/transacoes">Transações</NavLink>
 
         <NavLink to="/relatorio">Relatório</NavLink>

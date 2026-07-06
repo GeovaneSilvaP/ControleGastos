@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { criarPessoa } from "../../services/pessoaService";
 import "./NovaPessoa.css";
+import NovaTransacao from "../NovaTransacao/NovaTransacao";
 
 const schema = z.object({
   nome: z.string().min(3, "Nome muito curto"),
